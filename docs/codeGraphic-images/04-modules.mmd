@@ -1,0 +1,14 @@
+flowchart TB
+  subgraph gw [gateway]
+    DC[DashboardController]
+    LC[LoopServiceClient]
+    OC[OrderServiceClient]
+    GRC[GatewayRouteConfig]
+  end
+  subgraph com [common]
+    DTO[DashboardResponse]
+  end
+  DC --> LC
+  DC --> OC
+  LC --> loop
+  OC --> order

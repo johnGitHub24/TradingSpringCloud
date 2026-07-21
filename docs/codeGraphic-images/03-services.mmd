@@ -1,0 +1,9 @@
+flowchart TB
+  subgraph loop [:8081]
+    LT[GET /api/v1/trust]
+  end
+  subgraph order [:8082]
+    OL[GET /api/v1/orders]
+  end
+  LT --> MEM1[(in-memory trust)]
+  OL --> MEM2[(in-memory orders)]

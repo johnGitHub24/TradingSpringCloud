@@ -1,0 +1,9 @@
+sequenceDiagram
+  participant C as Client
+  participant G as Gateway :8080
+  participant L as loop :8081
+  participant O as order :8082
+  C->>G: GET /dashboard
+  G->>L: Feign /trust
+  G->>O: Feign /orders
+  G-->>C: DashboardResponse

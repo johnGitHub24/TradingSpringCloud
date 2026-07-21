@@ -1,0 +1,6 @@
+rootProject.name = 'trading-spring-cloud'
+
+include 'common'
+include 'loop-service'
+include 'order-service'
+include 'gateway'

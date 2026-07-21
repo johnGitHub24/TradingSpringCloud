@@ -1,0 +1,14 @@
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.idea/
+*.iml
+.DS_Store
+
+# eos-minimal onboard
+node_modules/
+*.log
+hs_err_pid*.log
+bash.exe.stackdump
+.env
+replay_pid*.log

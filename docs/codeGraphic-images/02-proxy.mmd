@@ -1,0 +1,4 @@
+flowchart LR
+  C[Client] --> G[Gateway :8080]
+  G -->|/proxy/loop/**| L[loop :8081]
+  G -->|/proxy/orders/**| O[order :8082]

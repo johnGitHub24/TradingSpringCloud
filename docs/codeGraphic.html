@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TradingSpringCloud — CodeGraphic</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root { --bg:#0f1419; --surface:#1a2332; --surface2:#243044; --border:#2d3a4f; --text:#e6edf3; --muted:#8b9cb3; --accent:#3b82f6; --accent2:#10b981; --warn:#f59e0b; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:"Segoe UI","Microsoft JhengHei",sans-serif; background:var(--bg); color:var(--text); line-height:1.6; min-height:100vh; }
+    .top { border-bottom:1px solid var(--border); background:linear-gradient(135deg,#1e3a5f 0%,#0f1419 70%); padding:1.5rem 2rem 0; }
+    .top h1 { font-size:1.5rem; margin-bottom:0.25rem; }
+    .top .sub { color:var(--muted); font-size:0.9rem; margin-bottom:1.25rem; }
+    .top .links a { color:var(--accent); text-decoration:none; margin-right:1rem; }
+    .tabs { display:flex; flex-wrap:wrap; gap:0.35rem; }
+    .tab { appearance:none; border:1px solid var(--border); background:var(--surface); color:var(--muted); padding:0.55rem 1.1rem; border-radius:8px 8px 0 0; cursor:pointer; font-size:0.9rem; border-bottom:none; }
+    .tab.active { background:var(--bg); color:var(--accent2); border-color:var(--accent); box-shadow:inset 0 2px 0 var(--accent); }
+    main { padding:1.5rem 2rem 3rem; max-width:1100px; }
+    .panel { display:none; } .panel.active { display:block; }
+    .panel h2 { font-size:1.2rem; border-bottom:2px solid var(--accent); padding-bottom:0.4rem; margin-bottom:0.75rem; }
+    .blurb { color:#c9d4e3; font-size:0.92rem; margin-bottom:1rem; }
+    .blurb li { margin-left:1.1rem; margin-bottom:0.25rem; }
+    .mermaid { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.25rem; overflow-x:auto; }
+    .note { margin-top:1rem; background:var(--surface2); border-left:3px solid var(--warn); padding:0.65rem 0.9rem; font-size:0.85rem; color:var(--muted); }
+    footer { padding:0 2rem 2rem; color:var(--muted); font-size:0.8rem; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <h1>TradingSpringCloud — CodeGraphic</h1>
+    <p class="sub">圖為主 · Gateway MVC 代理 · Feign 聚合 · 固定 URL 分散式入門</p>
+    <p class="links">
+      <a href="專案引導教學.html">專案引導教學（長文）</a>
+      <a href="md-viewer.html?src=../TradingSpringCloud%20%E8%A6%8F%E6%A0%BC%E6%9B%B8.md">規格書（權威）</a>
+      <a href="md-viewer.html?src=architecture.md">architecture.md</a>
+      <a href="swagger.html">API 文件（Swagger）</a>
+    </p>
+    <nav class="tabs">
+      <button type="button" class="tab active" data-tab="feign">Feign 聚合</button>
+      <button type="button" class="tab" data-tab="proxy">Gateway 代理</button>
+      <button type="button" class="tab" data-tab="services">服務</button>
+      <button type="button" class="tab" data-tab="modules">模組</button>
+    </nav>
+  </header>
+  <main>
+    <section id="panel-feign" class="panel active">
+      <h2>Feign 聚合 — Dashboard</h2>
+      <ul class="blurb">
+        <li><code>GET /api/v1/dashboard</code> 一次取 trust + orders。</li>
+        <li><code>DashboardService</code> 呼叫兩個 Feign Client。</li>
+        <li>組裝 <code>DashboardResponse</code>（common DTO）。</li>
+        <li>無 Eureka／Config（固定 URL 教學）。</li>
+      </ul>
+      <div class="mermaid">
+sequenceDiagram
+  participant C as Client
+  participant G as Gateway :8080
+  participant L as loop :8081
+  participant O as order :8082
+  C->>G: GET /dashboard
+  G->>L: Feign /trust
+  G->>O: Feign /orders
+  G-->>C: DashboardResponse
+      </div>
+      <p class="note">對照 TradingMicroService 的 <code>lb://</code> 服務發現。</p>
+    </section>
+    <section id="panel-proxy" class="panel" hidden>
+      <h2>Gateway MVC — 路徑代理</h2>
+      <ul class="blurb">
+        <li><code>/proxy/loop/**</code> → loop <code>/api/v1/**</code>。</li>
+        <li><code>/proxy/orders/**</code> → order <code>/api/v1/orders/**</code>。</li>
+        <li><code>GatewayRouteConfig</code> 改寫路徑。</li>
+        <li>HTTP/1.1 client 固定指向 <code>ServiceUrlsProperties</code>。</li>
+      </ul>
+      <div class="mermaid">
+flowchart LR
+  C[Client] --> G[Gateway :8080]
+  G -->|/proxy/loop/**| L[loop :8081]
+  G -->|/proxy/orders/**| O[order :8082]
+      </div>
+      <p class="note">啟動：<code>scripts/start-all.ps1</code> 三模組。</p>
+    </section>
+    <section id="panel-services" class="panel" hidden>
+      <h2>服務 — loop / order</h2>
+      <ul class="blurb">
+        <li>loop-service：信任分查詢／累加（記憶體）。</li>
+        <li>order-service：訂單查詢 Map（記憶體）。</li>
+        <li>無 DB／Kafka／Redis（刻意精簡）。</li>
+        <li>ProblemDetail 統一 404 等錯誤。</li>
+      </ul>
+      <div class="mermaid">
+flowchart TB
+  subgraph loop [:8081]
+    LT[GET /api/v1/trust]
+  end
+  subgraph order [:8082]
+    OL[GET /api/v1/orders]
+  end
+  LT --> MEM1[(in-memory trust)]
+  OL --> MEM2[(in-memory orders)]
+      </div>
+      <p class="note">詳見 <code>docs/功能流程說明.md</code>。</p>
+    </section>
+    <section id="panel-modules" class="panel" hidden>
+      <h2>模組 — Gradle 四件套</h2>
+      <ul class="blurb">
+        <li><code>gateway</code>：Dashboard + 代理 + Vue static。</li>
+        <li><code>loop-service</code> / <code>order-service</code> 業務。</li>
+        <li><code>common/dto</code> 跨服務契約。</li>
+        <li>驗證：<code>scripts/check.ps1</code>。</li>
+      </ul>
+      <div class="mermaid">
+flowchart TB
+  subgraph gw [gateway]
+    DC[DashboardController]
+    LC[LoopServiceClient]
+    OC[OrderServiceClient]
+    GRC[GatewayRouteConfig]
+  end
+  subgraph com [common]
+    DTO[DashboardResponse]
+  end
+  DC --> LC
+  DC --> OC
+  LC --> loop
+  OC --> order
+      </div>
+      <p class="note">五專案路線中的 Spring Cloud 輕量版。</p>
+    </section>
+  </main>
+  <footer>CodeGraphic · 非權威 · 衝突以規格書為準 · Mermaid CDN</footer>
+  <script>
+    mermaid.initialize({ startOnLoad: false, theme: "dark", securityLevel: "loose" });
+    const panels = { feign: document.getElementById("panel-feign"), proxy: document.getElementById("panel-proxy"), services: document.getElementById("panel-services"), modules: document.getElementById("panel-modules") };
+    const rendered = new Set(["feign"]);
+    async function renderPanel(id) { if (rendered.has(id)) return; await mermaid.run({ nodes: panels[id].querySelectorAll(".mermaid") }); rendered.add(id); }
+    mermaid.run({ nodes: panels.feign.querySelectorAll(".mermaid") });
+    document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", async () => {
+      const id = tab.dataset.tab;
+      document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t === tab));
+      Object.entries(panels).forEach(([k, p]) => { p.classList.toggle("active", k === id); p.hidden = k !== id; });
+      await renderPanel(id);
+    }));
+  </script>
+</body>
+</html>
