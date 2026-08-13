@@ -33,4 +33,26 @@ class GatewayRouteConfigTest {
         assertThat(loopServiceRoute).isNotNull();
         assertThat(orderServiceRoute).isNotNull();
     }
+
+    /**
+     * CASE CLOUD-003：loop 代理路徑改寫契約。
+     * Given: 公開／下游範本常數；When: 代入 segment=trust；Then: 等於整合測試實際轉發 URI。
+     */
+    @Test
+    void CLOUD_003_loopProxyRewritesSegmentToLoopApi() {
+        assertThat(GatewayRouteConfig.LOOP_PROXY_PATTERN).isEqualTo("/proxy/loop/{segment}");
+        assertThat(GatewayRouteConfig.LOOP_DOWNSTREAM_PATTERN.replace("{segment}", "trust"))
+                .isEqualTo("/api/v1/trust");
+    }
+
+    /**
+     * CASE CLOUD-004：order 代理路徑改寫契約。
+     * Given: 公開／下游範本常數；When: 代入 segment=1001；Then: 等於整合測試實際轉發 URI。
+     */
+    @Test
+    void CLOUD_004_orderProxyRewritesSegmentToOrderApi() {
+        assertThat(GatewayRouteConfig.ORDER_PROXY_PATTERN).isEqualTo("/proxy/orders/{segment}");
+        assertThat(GatewayRouteConfig.ORDER_DOWNSTREAM_PATTERN.replace("{segment}", "1001"))
+                .isEqualTo("/api/v1/orders/1001");
+    }
 }

@@ -5,23 +5,19 @@
 
 ## 文件入口
 
+單一入口：本 README。衝突以主規格為準。
+
 | 文件 | 說明 |
 |------|------|
-| [TradingSpringCloud 規格書.md](TradingSpringCloud%20規格書.md) | **主規格書（權威）** |
-| [TradingSpringCloud-SPEC.md](TradingSpringCloud-SPEC.md) | EOS 英文入口／摘要 |
-| [API規格書.md](API規格書.md) | API 端點完整參考 |
-| [docs/architecture.md](docs/architecture.md) | 分層與模組（可執行摘要） |
-| [docs/codeGraphic.html](docs/codeGraphic.html) | Tab 式架構圖（Feign／代理／服務／模組） |
-| [docs/testing.md](docs/testing.md) | 驗證入口／DoD |
-| [docs/資料庫設計.md](docs/資料庫設計.md) | 無 DB（記憶體） |
-| [docs/驗證設計.md](docs/驗證設計.md) | ProblemDetail／錯誤 |
-| [docs/測試與CI.md](docs/測試與CI.md) | Case ID、CI |
-| [docs/功能流程說明.md](docs/功能流程說明.md) | 每個 API 怎麼跑（Mermaid） |
-| [docs/架構學習導引.md](docs/架構學習導引.md) | Spring Cloud 概念學習地圖 |
-| [docs/專案引導教學.html](docs/專案引導教學.html) | 互動架構與流程圖 |
-| [docs/初學者學習說明書.md](docs/初學者學習說明書.md) | 3 天節奏 |
-| [開發專案.md](開發專案.md) | 開發計畫、DoD |
-| [CLAUDE.md](CLAUDE.md) | AI／工程薄規則（EOS 0.1.4） |
+| [TradingSpringCloud 規格書.md](TradingSpringCloud%20規格書.md) | **主規格（權威）** |
+| [API規格書.md](API規格書.md) | API 契約 |
+| [docs/architecture.md](docs/architecture.md) | 分層與模組 |
+| [docs/codeGraphic.html](docs/codeGraphic.html) | 架構圖（非權威） |
+| [docs/testing.md](docs/testing.md) | 測試／Case／check |
+| [docs/資料庫設計.md](docs/資料庫設計.md) | 資料庫 |
+| [docs/驗證設計.md](docs/驗證設計.md) | 驗證／權限 |
+| [CLAUDE.md](CLAUDE.md) | AI 薄規則 |
+| [scripts/README.md](scripts/README.md) | 驗證／啟動腳本 |
 
 ## 模組
 
@@ -32,33 +28,32 @@
 | `order-service` | 8082 | 訂單查詢（延伸 MVP） |
 | `common` | — | 共用 DTO |
 
-## 快速啟動
+## 快速開始
+
+驗證（JDK 21；可先 `. .\scripts\env.ps1`）：
 
 ```powershell
-cd "D:\ClaudeCode\TradingSpringCloud"
-. .\scripts\env.ps1
-.\scripts\start-all.ps1
+.\scripts\check.ps1
 ```
 
-或分別啟動：
+啟動（IntelliJ Gradle 建議 `:order-service:bootRun`；另開 loop／gateway）：
 
 ```powershell
+.\gradlew.bat :order-service:bootRun   # 8082（IntelliJ 預設）
 .\gradlew.bat :loop-service:bootRun    # 8081
-.\gradlew.bat :order-service:bootRun   # 8082
 .\gradlew.bat :gateway:bootRun         # 8080
 ```
 
 | 用途 | URL |
 |------|-----|
-| 教學 | `docs/專案引導教學.html` 或 http://localhost:8080/guide.html |
+| 教學 | `docs/codeGraphic.html` 或 http://localhost:8080/guide.html |
 | Vue 控制台 | http://localhost:8080/ |
 | Dashboard API | http://localhost:8080/api/v1/dashboard |
 
 ## 測試
 
 ```powershell
-.\gradlew.bat clean test    # 整合 4 + 單元 2 = 6，全綠
-.\scripts\check.ps1
+.\scripts\check.ps1          # = gradlew check（unit + integration）
 ```
 
 ## 五專案路線
@@ -67,4 +62,5 @@ cd "D:\ClaudeCode\TradingSpringCloud"
 TransactionClosedStateMachine → Trading System MVP → TradingSpringCloud → APIGatewayMQ → TradingKubernetes
 ```
 
-> Docs standard: EngineeringOS eos-minimal @ 0.1.4 — `knowledge/documentation.md`
+> Docs standard: EngineeringOS eos-minimal @ 0.1.10 — `knowledge/documentation.md`
+

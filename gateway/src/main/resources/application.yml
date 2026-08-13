@@ -15,3 +15,15 @@ management:
     web:
       exposure:
         include: health,info
+startup:
+  info:
+    enabled: true
+    project-name: TradingSpringCloud Gateway
+    frontend: static
+    h2: false
+    api-docs: false
+    probe: true
+    home-path: /
+    extra-paths:
+      - /guide.html
+    related-urls: Loop|http://localhost:8081/actuator/health,Order|http://localhost:8082/actuator/health

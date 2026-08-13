@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 【職責】驗證 Gateway MVC 代理路徑會正確轉發至 loop／order 下游。
  * 【技巧】RANDOM_PORT + {@link TestRestTemplate}；WireMock 驗證實際被呼叫的下游 URI。
  * 【概念】代理測試關注「路徑改寫與轉發」，與 Feign 聚合是兩條不同的 Gateway 教學路徑。
- * 【技巧驗證】CLOUD-003／004：/proxy/loop、/proxy/orders 轉發與下游請求次數。
+ * 【技巧驗證】CASE CLOUD-003、CASE CLOUD-004：/proxy/loop、/proxy/orders 轉發與下游請求次數。
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -81,6 +81,25 @@ class GatewayRouteIntegrationTest {
     }
 
     /**
+     * CASE CLOUD-003：下游 404 經 loop 代理原樣轉回。
+     * Given: WireMock /api/v1/missing 回 404；When: GET /proxy/loop/missing；Then: 404。
+     */
+    @Test
+    void CLOUD_003_loopProxyForwardsDownstreamNotFound() {
+        String body = "{\"status\":404,\"title\":\"Not Found\"}";
+        loopMock.stubFor(get(urlEqualTo("/api/v1/missing"))
+                .willReturn(aResponse()
+                        .withStatus(404)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Content-Length", String.valueOf(body.getBytes().length))
+                        .withBody(body)));
+
+        ResponseEntity<String> response = restTemplate.getForEntity("/proxy/loop/missing", String.class);
+
+        assertThat(response.getStatusCode().value()).isEqualTo(404);
+    }
+
+    /**
      * CASE CLOUD-004：order 代理轉發。
      * Given: WireMock stub /api/v1/orders/1001；When: GET /proxy/orders/1001；Then: 200 且下游被呼叫一次。
      */
@@ -91,5 +110,25 @@ class GatewayRouteIntegrationTest {
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).contains("\"status\":\"FILLED\"");
         orderMock.verify(1, com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor(urlEqualTo("/api/v1/orders/1001")));
+    }
+
+    /**
+     * CASE CLOUD-004：下游 404 經代理原樣轉回。
+     * Given: WireMock /api/v1/orders/9999 回 404；When: GET /proxy/orders/9999；Then: 404。
+     */
+    @Test
+    void CLOUD_004_orderProxyForwardsDownstreamNotFound() {
+        String problem = "{\"title\":\"Order Not Found\",\"errorCode\":\"ORDER_NOT_FOUND\"}";
+        orderMock.stubFor(get(urlEqualTo("/api/v1/orders/9999"))
+                .willReturn(aResponse()
+                        .withStatus(404)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Content-Length", String.valueOf(problem.getBytes().length))
+                        .withBody(problem)));
+
+        ResponseEntity<String> response = restTemplate.getForEntity("/proxy/orders/9999", String.class);
+
+        assertThat(response.getStatusCode().value()).isEqualTo(404);
+        assertThat(response.getBody()).contains("ORDER_NOT_FOUND");
     }
 }

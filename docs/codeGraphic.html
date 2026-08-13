@@ -79,7 +79,7 @@ flowchart LR
   G -->|/proxy/loop/**| L[loop :8081]
   G -->|/proxy/orders/**| O[order :8082]
       </div>
-      <p class="note">啟動：<code>scripts/start-all.ps1</code> 三模組。</p>
+      <p class="note">啟動：<code>.\gradlew.bat :loop-service:bootRun</code>／<code>:order-service:bootRun</code>／<code>:gateway:bootRun</code>。驗證：<code>scripts/check.ps1</code>。</p>
     </section>
     <section id="panel-services" class="panel" hidden>
       <h2>服務 — loop / order</h2>
@@ -100,7 +100,7 @@ flowchart TB
   LT --> MEM1[(in-memory trust)]
   OL --> MEM2[(in-memory orders)]
       </div>
-      <p class="note">詳見 <code>docs/功能流程說明.md</code>。</p>
+      <p class="note">詳見 <code>docs/architecture.md</code>。</p>
     </section>
     <section id="panel-modules" class="panel" hidden>
       <h2>模組 — Gradle 四件套</h2>

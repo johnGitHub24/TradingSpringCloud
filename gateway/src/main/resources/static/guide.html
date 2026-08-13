@@ -110,9 +110,13 @@ sequenceDiagram
 
   <section id="start">
     <h2>6. 快速啟動</h2>
-    <pre>cd "D:\ClaudeCode\TradingSpringCloud"
+    <pre>cd "D:\SouceDemo\RemoteSpringBoot\TradingSpringCloud"
 . .\scripts\env.ps1
-.\scripts\start-all.ps1
+.\scripts\check.ps1                 # 驗證 = gradlew check
+
+.\gradlew.bat :order-service:bootRun   # 8082
+.\gradlew.bat :loop-service:bootRun    # 8081
+.\gradlew.bat :gateway:bootRun         # 8080
 
 http://localhost:8080/              Vue 控制台
 http://localhost:8080/api/v1/dashboard</pre>
@@ -126,7 +130,7 @@ http://localhost:8080/api/v1/dashboard</pre>
       <tr><td>CLOUD-002</td><td>Loop Gateway 代理</td></tr>
       <tr><td>CLOUD-003</td><td>Order Gateway 代理</td></tr>
     </table>
-    <pre>.\gradlew.bat test</pre>
+    <pre>.\scripts\check.ps1</pre>
   </section>
 </main>
 </div>

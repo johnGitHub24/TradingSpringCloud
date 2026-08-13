@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * 【職責】驗證 Gateway 儀表板經 Feign 聚合 loop／order 下游的整合行為。
  * 【技巧】{@code @SpringBootTest} + MockMvc；WireMock 動態埠搭配 {@code @DynamicPropertySource}。
  * 【概念】整合測試用假下游隔離真實服務，專注驗證聚合契約與 JSON 欄位。
- * 【技巧驗證】CLOUD-001：Feign 聚合 systemTrust／orderCount／latestOrderStatus。
+ * 【技巧驗證】CASE CLOUD-001：Feign 聚合 systemTrust／orderCount／latestOrderStatus。
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -75,5 +75,35 @@ class DashboardIntegrationTest {
                 .andExpect(jsonPath("$.systemTrust").value(5))
                 .andExpect(jsonPath("$.orderCount").value(1))
                 .andExpect(jsonPath("$.latestOrderStatus").value("FILLED"));
+    }
+
+    /**
+     * CASE CLOUD-001：下游 500 時儀表板不得假裝成功。
+     * Given: loop WireMock 回 500；When: GET /api/v1/dashboard；Then: FeignException 向上拋（無 Handler 轉譯）。
+     */
+    @Test
+    void CLOUD_001_dashboardFailsWhenLoopDownstreamErrors() {
+        loopMock.resetAll();
+        loopMock.stubFor(get(urlEqualTo("/api/v1/trust"))
+                .willReturn(aResponse().withStatus(500).withBody("loop-down")));
+
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> mockMvc.perform(
+                        org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/api/v1/dashboard"))
+                .andReturn())
+                .isInstanceOf(jakarta.servlet.ServletException.class)
+                .hasCauseInstanceOf(feign.FeignException.class);
+    }
+
+    /**
+     * CASE CLOUD-002：路由說明端點可讀。
+     * Given: Gateway 已啟動；When: GET /api/v1/gateway/routes；Then: 200 且含 dashboard／proxy 對照。
+     */
+    @Test
+    void CLOUD_002_gatewayRoutesEndpointDescribesProxies() throws Exception {
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/api/v1/gateway/routes"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.loopProxy").value(org.hamcrest.Matchers.containsString("/proxy/loop")))
+                .andExpect(jsonPath("$.orderProxy").value(org.hamcrest.Matchers.containsString("/proxy/orders")))
+                .andExpect(jsonPath("$.dashboard").value(org.hamcrest.Matchers.containsString("OpenFeign")));
     }
 }

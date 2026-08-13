@@ -2,3 +2,6 @@ trading:
   services:
     loop-url: http://localhost:${wiremock.loop.port:8081}
     order-url: http://localhost:${wiremock.order.port:8082}
+startup:
+  info:
+    enabled: false

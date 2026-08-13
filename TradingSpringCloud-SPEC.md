@@ -1,7 +1,7 @@
 # TradingSpringCloud Specification
 
 > **EOS 入口規格（英文摘要）。** 領域細節與驗收衝突以 [TradingSpringCloud 規格書.md](TradingSpringCloud%20規格書.md) 為準。  
-> Docs standard: EngineeringOS eos-minimal @ 0.1.4 — `knowledge/documentation.md`
+> Docs standard: EngineeringOS eos-minimal @ 0.1.10 — `knowledge/documentation.md`
 
 ## 0. Document map
 
@@ -14,7 +14,7 @@
 | [docs/testing.md](docs/testing.md) | 測試／DoD 摘要 |
 | [docs/資料庫設計.md](docs/資料庫設計.md) | 無 DB（記憶體）說明 |
 | [docs/驗證設計.md](docs/驗證設計.md) | ProblemDetail／錯誤 |
-| [docs/測試與CI.md](docs/測試與CI.md) | Case ID、CI |
+| [docs/testing.md](docs/testing.md) | Case ID、CI |
 | [CLAUDE.md](CLAUDE.md) | AI 薄規則 |
 | [README.md](README.md) | 快速開始 |
 

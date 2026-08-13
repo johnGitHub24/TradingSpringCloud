@@ -20,11 +20,11 @@
 | `docs/testing.md` | 驗證入口／DoD 摘要 |
 | `docs/資料庫設計.md` | 無 DB（記憶體）說明 |
 | `docs/驗證設計.md` | ProblemDetail／錯誤 |
-| `docs/測試與CI.md` | Case ID 對照、CI 與腳本 |
-| `docs/架構學習導引.md` | Spring Cloud 概念學習地圖（推薦起手式） |
-| `docs/專案引導教學.html` | 可點選的互動架構與流程圖 |
-| `docs/功能流程說明.md` | 每個 API「做什麼、怎麼跑」（Mermaid） |
-| `docs/初學者學習說明書.md` | 環境、啟動、3 天入門 |
+| `docs/testing.md` | Case ID 對照、CI 與腳本 |
+| `docs/architecture.md` | Spring Cloud 概念學習地圖（推薦起手式） |
+| `docs/codeGraphic.html` | 可點選的互動架構與流程圖 |
+| `docs/architecture.md` | 每個 API「做什麼、怎麼跑」（Mermaid） |
+| `docs/architecture.md` | 環境、啟動、3 天入門 |
 
 ### 0.2 外部參考（非本專案規格）
 
@@ -114,12 +114,16 @@ APIGatewayMQ 規格書           ──格式規範──►  本文件章節結
 ### 1.4 啟動方式
 
 ```powershell
-cd "D:\ClaudeCode\TradingSpringCloud"
+cd "D:\SouceDemo\RemoteSpringBoot\TradingSpringCloud"
 . .\scripts\env.ps1          # 設定 JAVA_HOME
-.\scripts\start-all.ps1      # 啟動三服務
 
-# 測試
-.\gradlew.bat clean test --console=plain
+# 驗證
+.\scripts\check.ps1          # = gradlew check
+
+# 啟動（各開一個終端／IntelliJ Gradle）
+.\gradlew.bat :order-service:bootRun   # 8082
+.\gradlew.bat :loop-service:bootRun    # 8081
+.\gradlew.bat :gateway:bootRun         # 8080
 ```
 
 ---
@@ -289,7 +293,7 @@ Client → Gateway GET /proxy/orders/1001
 |------|------|-------------|------|------|
 | 單元/切片 | `@WebMvcTest`（mock service） | `gradlew :module:test` | 無 | loop / order |
 | 整合 | `@SpringBootTest` + WireMock | `gradlew :gateway:test` | WireMock | gateway |
-| 全專案 | — | `gradlew test` | 同上 | 全部 |
+| 全專案 | — | `.\scripts\check.ps1`（`gradlew check`） | 同上 | 全部 |
 
 ### 6.2 Case ID 對照
 
@@ -315,7 +319,7 @@ Client → Gateway GET /proxy/orders/1001
 - [x] `gradlew clean test` 全綠（unit + integration，6 個）
 - [x] Gateway 代理 `/proxy/**` 有自動化整合測試（CLOUD-003/004）
 - [x] Feign 聚合 `/api/v1/dashboard` 有整合測試（CLOUD-001）
-- [ ] `scripts/start-all.ps1` 三服務可啟動並手動驗證
+- [ ] `.\scripts\check.ps1` 全綠；三服務可用 `:module:bootRun` 手動驗證
 - [ ] Swagger 三服務可測
 
 ---
@@ -346,8 +350,8 @@ Client → Gateway GET /proxy/orders/1001
 | 腳本 | 用途 |
 |------|------|
 | `.\scripts\env.ps1` | 設定 JAVA_HOME |
-| `.\scripts\start-all.ps1` | 啟動三服務 |
-| `.\scripts\check.ps1` | `gradlew test` 包裝 |
+| `.\scripts\check.ps1` | 驗證：`gradlew check` |
+| `.\gradlew.bat :order-service:bootRun` 等 | 啟動各模組（8082／8081／8080） |
 
 ### 7.4 關鍵類別索引
 

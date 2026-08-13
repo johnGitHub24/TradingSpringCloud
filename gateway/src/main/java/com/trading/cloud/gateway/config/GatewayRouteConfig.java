@@ -21,6 +21,15 @@ import static org.springframework.cloud.gateway.server.mvc.predicate.GatewayRequ
 @Configuration
 public class GatewayRouteConfig {
 
+  /** 對外 loop 代理路徑；與 CLOUD-003 整合測試契約相同。 */
+  public static final String LOOP_PROXY_PATTERN = "/proxy/loop/{segment}";
+  /** 轉發至 loop-service 的下游路徑範本。 */
+  public static final String LOOP_DOWNSTREAM_PATTERN = "/api/v1/{segment}";
+  /** 對外 order 代理路徑；與 CLOUD-004 整合測試契約相同。 */
+  public static final String ORDER_PROXY_PATTERN = "/proxy/orders/{segment}";
+  /** 轉發至 order-service 的下游路徑範本。 */
+  public static final String ORDER_DOWNSTREAM_PATTERN = "/api/v1/orders/{segment}";
+
   private final ServiceUrlsProperties serviceUrls;
 
   /** 注入代理路由解析下游位置所需的設定。 */
@@ -38,8 +47,8 @@ public class GatewayRouteConfig {
   @Bean
   public RouterFunction<ServerResponse> loopServiceRoute() {
     return route("loop_service")
-        .route(path("/proxy/loop/{segment}"), http(serviceUrls.getLoopUrl()))
-        .filter(setPath("/api/v1/{segment}"))
+        .route(path(LOOP_PROXY_PATTERN), http(serviceUrls.getLoopUrl()))
+        .filter(setPath(LOOP_DOWNSTREAM_PATTERN))
         .filter((request, next) -> {
           log.info("[Gateway] loop proxy {} {}", request.method(), request.uri().getPath());
           return next.handle(request);
@@ -57,8 +66,8 @@ public class GatewayRouteConfig {
   @Bean
   public RouterFunction<ServerResponse> orderServiceRoute() {
     return route("order_service")
-        .route(path("/proxy/orders/{segment}"), http(serviceUrls.getOrderUrl()))
-        .filter(setPath("/api/v1/orders/{segment}"))
+        .route(path(ORDER_PROXY_PATTERN), http(serviceUrls.getOrderUrl()))
+        .filter(setPath(ORDER_DOWNSTREAM_PATTERN))
         .filter((request, next) -> {
           log.info("[Gateway] order proxy {} {}", request.method(), request.uri().getPath());
           return next.handle(request);

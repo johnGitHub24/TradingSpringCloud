@@ -11,6 +11,8 @@ import com.trading.cloud.common.dto.TrustResponse;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,5 +44,43 @@ class TrustControllerTest {
         mockMvc.perform(get("/api/v1/trust"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.systemTrust").value(3));
+    }
+
+    /**
+     * CASE CLOUD-LOOP-002：遞增信任分數。
+     * Given: Service stub increment 回 4；When: POST /api/v1/trust/increment；Then: 200 且 JSON 正確。
+     */
+    @Test
+    void CLOUD_LOOP_002_incrementsTrust() throws Exception {
+        TrustResponse trust = new TrustResponse();
+        trust.setSystemTrust(4);
+        trust.setService("loop-service");
+        when(trustService.increment()).thenReturn(trust);
+
+        mockMvc.perform(post("/api/v1/trust/increment"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.systemTrust").value(4))
+                .andExpect(jsonPath("$.service").value("loop-service"));
+    }
+
+    /**
+     * CASE CLOUD-LOOP-001：存活探針不依賴業務狀態。
+     * Given: 無 stub；When: GET /api/v1/health/ping；Then: 200 且固定字串。
+     */
+    @Test
+    void CLOUD_LOOP_001_pingReturnsAliveMarker() throws Exception {
+        mockMvc.perform(get("/api/v1/health/ping"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("loop-service-ok"));
+    }
+
+    /**
+     * CASE CLOUD-LOOP-001：未知路徑回 404。
+     * Given: 無對應 mapping；When: GET /api/v1/trust/missing；Then: 404。
+     */
+    @Test
+    void CLOUD_LOOP_001_unknownPathReturnsNotFound() throws Exception {
+        mockMvc.perform(get("/api/v1/trust/missing"))
+                .andExpect(status().isNotFound());
     }
 }
