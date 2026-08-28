@@ -1,6 +1,6 @@
-# TradingSpringCloud — 專案規則（薄）
+﻿# TradingSpringCloud — 專案規則（薄）
 
-繼承：EngineeringOS eos-minimal @ **0.1.10**  
+繼承：EngineeringOS eos-minimal @ **0.1.13**  
 公版：`EngineeringOS/eos-minimal/`  
 權威規格：[TradingSpringCloud 規格書.md](TradingSpringCloud%20規格書.md)  
 EOS 入口：[TradingSpringCloud-SPEC.md](TradingSpringCloud-SPEC.md)
@@ -22,7 +22,7 @@ EOS 入口：[TradingSpringCloud-SPEC.md](TradingSpringCloud-SPEC.md)
 
 ## 註解深度
 - comment_verbosity: **detailed**
-- 權威：`EngineeringOS/eos-minimal/knowledge/comments.md` §0／§3b（eos-minimal @ 0.1.10）
+- 權威：`EngineeringOS/eos-minimal/knowledge/comments.md` §0／§3b（eos-minimal @ 0.1.13）
 - 結構：【職責】【技巧】【概念】；簡單 getter 可併入類別說明
 
 
