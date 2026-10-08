@@ -19,9 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * 【職責】驗證 Gateway MVC 代理路徑會正確轉發至 loop／order 下游。
- * 【技巧】RANDOM_PORT + {@link TestRestTemplate}；WireMock 驗證實際被呼叫的下游 URI。
- * 【概念】代理測試關注「路徑改寫與轉發」，與 Feign 聚合是兩條不同的 Gateway 教學路徑。
- * 【技巧驗證】CASE CLOUD-003、CASE CLOUD-004：/proxy/loop、/proxy/orders 轉發與下游請求次數。
+ * <p>【技巧】RANDOM_PORT + {@link TestRestTemplate}；WireMock 驗證實際被呼叫的下游 URI。
+ * <p>【概念】代理測試關注「路徑改寫與轉發」，與 Feign 聚合是兩條不同的 Gateway 教學路徑。
+ * <p>【技巧驗證】CASE CLOUD-003、CASE CLOUD-004：/proxy/loop、/proxy/orders 轉發與下游請求次數。
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -69,7 +69,7 @@ class GatewayRouteIntegrationTest {
 
     /**
      * CASE CLOUD-003：loop 代理轉發。
-     * Given: WireMock stub /api/v1/trust；When: GET /proxy/loop/trust；Then: 200 且下游被呼叫一次。
+     * <br>Given: WireMock stub /api/v1/trust；When: GET /proxy/loop/trust；Then: 200 且下游被呼叫一次。
      */
     @Test
     void CLOUD_003_loopProxyForwardsToLoopService() {
@@ -82,7 +82,7 @@ class GatewayRouteIntegrationTest {
 
     /**
      * CASE CLOUD-003：下游 404 經 loop 代理原樣轉回。
-     * Given: WireMock /api/v1/missing 回 404；When: GET /proxy/loop/missing；Then: 404。
+     * <br>Given: WireMock /api/v1/missing 回 404；When: GET /proxy/loop/missing；Then: 404。
      */
     @Test
     void CLOUD_003_loopProxyForwardsDownstreamNotFound() {
@@ -101,7 +101,7 @@ class GatewayRouteIntegrationTest {
 
     /**
      * CASE CLOUD-004：order 代理轉發。
-     * Given: WireMock stub /api/v1/orders/1001；When: GET /proxy/orders/1001；Then: 200 且下游被呼叫一次。
+     * <br>Given: WireMock stub /api/v1/orders/1001；When: GET /proxy/orders/1001；Then: 200 且下游被呼叫一次。
      */
     @Test
     void CLOUD_004_orderProxyForwardsToOrderService() {
@@ -114,7 +114,7 @@ class GatewayRouteIntegrationTest {
 
     /**
      * CASE CLOUD-004：下游 404 經代理原樣轉回。
-     * Given: WireMock /api/v1/orders/9999 回 404；When: GET /proxy/orders/9999；Then: 404。
+     * <br>Given: WireMock /api/v1/orders/9999 回 404；When: GET /proxy/orders/9999；Then: 404。
      */
     @Test
     void CLOUD_004_orderProxyForwardsDownstreamNotFound() {

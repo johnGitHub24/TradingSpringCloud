@@ -18,8 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * 【職責】切片測試 TrustController 的 HTTP 映射與 JSON 回應。
- * 【技巧】{@code @WebMvcTest} + {@code @MockBean} 隔離 Service。
- * 【概念】Web 切片測試不啟動完整上下文，專注驗證 Controller 契約。
+ * <p>【技巧】{@code @WebMvcTest} + {@code @MockBean} 隔離 Service。
+ * <p>【概念】Web 切片測試不啟動完整上下文，專注驗證 Controller 契約。
  */
 @WebMvcTest(TrustController.class)
 class TrustControllerTest {
@@ -32,7 +32,7 @@ class TrustControllerTest {
 
     /**
      * CASE CLOUD-LOOP-001：查詢信任分數。
-     * Given: Service stub systemTrust=3；When: GET /api/v1/trust；Then: 200 且 JSON 正確。
+     * <br>Given: Service stub systemTrust=3；When: GET /api/v1/trust；Then: 200 且 JSON 正確。
      */
     @Test
     void CLOUD_LOOP_001_returnsTrust() throws Exception {
@@ -48,7 +48,7 @@ class TrustControllerTest {
 
     /**
      * CASE CLOUD-LOOP-002：遞增信任分數。
-     * Given: Service stub increment 回 4；When: POST /api/v1/trust/increment；Then: 200 且 JSON 正確。
+     * <br>Given: Service stub increment 回 4；When: POST /api/v1/trust/increment；Then: 200 且 JSON 正確。
      */
     @Test
     void CLOUD_LOOP_002_incrementsTrust() throws Exception {
@@ -65,7 +65,7 @@ class TrustControllerTest {
 
     /**
      * CASE CLOUD-LOOP-001：存活探針不依賴業務狀態。
-     * Given: 無 stub；When: GET /api/v1/health/ping；Then: 200 且固定字串。
+     * <br>Given: 無 stub；When: GET /api/v1/health/ping；Then: 200 且固定字串。
      */
     @Test
     void CLOUD_LOOP_001_pingReturnsAliveMarker() throws Exception {
@@ -76,7 +76,7 @@ class TrustControllerTest {
 
     /**
      * CASE CLOUD-LOOP-001：未知路徑回 404。
-     * Given: 無對應 mapping；When: GET /api/v1/trust/missing；Then: 404。
+     * <br>Given: 無對應 mapping；When: GET /api/v1/trust/missing；Then: 404。
      */
     @Test
     void CLOUD_LOOP_001_unknownPathReturnsNotFound() throws Exception {

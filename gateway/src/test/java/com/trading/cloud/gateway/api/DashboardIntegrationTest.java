@@ -21,9 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * 【職責】驗證 Gateway 儀表板經 Feign 聚合 loop／order 下游的整合行為。
- * 【技巧】{@code @SpringBootTest} + MockMvc；WireMock 動態埠搭配 {@code @DynamicPropertySource}。
- * 【概念】整合測試用假下游隔離真實服務，專注驗證聚合契約與 JSON 欄位。
- * 【技巧驗證】CASE CLOUD-001：Feign 聚合 systemTrust／orderCount／latestOrderStatus。
+ * <p>【技巧】{@code @SpringBootTest} + MockMvc；WireMock 動態埠搭配 {@code @DynamicPropertySource}。
+ * <p>【概念】整合測試用假下游隔離真實服務，專注驗證聚合契約與 JSON 欄位。
+ * <p>【技巧驗證】CASE CLOUD-001：Feign 聚合 systemTrust／orderCount／latestOrderStatus。
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -66,7 +66,7 @@ class DashboardIntegrationTest {
 
     /**
      * CASE CLOUD-001：儀表板 Feign 聚合。
-     * Given: WireMock 回傳 trust=5 與一筆 FILLED 訂單；When: GET /api/v1/dashboard；Then: 200 且欄位正確。
+     * <br>Given: WireMock 回傳 trust=5 與一筆 FILLED 訂單；When: GET /api/v1/dashboard；Then: 200 且欄位正確。
      */
     @Test
     void CLOUD_001_dashboardAggregatesViaFeign() throws Exception {
@@ -79,7 +79,7 @@ class DashboardIntegrationTest {
 
     /**
      * CASE CLOUD-001：下游 500 時儀表板不得假裝成功。
-     * Given: loop WireMock 回 500；When: GET /api/v1/dashboard；Then: FeignException 向上拋（無 Handler 轉譯）。
+     * <br>Given: loop WireMock 回 500；When: GET /api/v1/dashboard；Then: FeignException 向上拋（無 Handler 轉譯）。
      */
     @Test
     void CLOUD_001_dashboardFailsWhenLoopDownstreamErrors() {
@@ -96,7 +96,7 @@ class DashboardIntegrationTest {
 
     /**
      * CASE CLOUD-002：路由說明端點可讀。
-     * Given: Gateway 已啟動；When: GET /api/v1/gateway/routes；Then: 200 且含 dashboard／proxy 對照。
+     * <br>Given: Gateway 已啟動；When: GET /api/v1/gateway/routes；Then: 200 且含 dashboard／proxy 對照。
      */
     @Test
     void CLOUD_002_gatewayRoutesEndpointDescribesProxies() throws Exception {

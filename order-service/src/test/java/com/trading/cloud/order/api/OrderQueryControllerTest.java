@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * 【職責】切片測試 OrderQueryController 查單契約。
- * 【技巧】{@code @WebMvcTest} + Mock Service；匯入 {@link GlobalExceptionHandler} 以涵蓋錯誤路徑組態。
- * 【概念】Controller 測試用 stub 回傳 DTO，驗證 HTTP 狀態與 JSON 欄位即可。
+ * <p>【技巧】{@code @WebMvcTest} + Mock Service；匯入 {@link GlobalExceptionHandler} 以涵蓋錯誤路徑組態。
+ * <p>【概念】Controller 測試用 stub 回傳 DTO，驗證 HTTP 狀態與 JSON 欄位即可。
  */
 @WebMvcTest(controllers = OrderQueryController.class)
 @Import(GlobalExceptionHandler.class)
@@ -35,7 +35,7 @@ class OrderQueryControllerTest {
 
     /**
      * CASE CLOUD-ORDER-001：依 ID 查單。
-     * Given: Service 回傳 FILLED 訂單；When: GET /api/v1/orders/1001；Then: 200 且 status=FILLED。
+     * <br>Given: Service 回傳 FILLED 訂單；When: GET /api/v1/orders/1001；Then: 200 且 status=FILLED。
      */
     @Test
     void CLOUD_ORDER_001_returnsOrder() throws Exception {
@@ -52,7 +52,7 @@ class OrderQueryControllerTest {
 
     /**
      * CASE CLOUD-ORDER-001：查無訂單轉 RFC 7807 404。
-     * Given: Service 拋 OrderNotFoundException；When: GET /api/v1/orders/9999；Then: 404 且 errorCode。
+     * <br>Given: Service 拋 OrderNotFoundException；When: GET /api/v1/orders/9999；Then: 404 且 errorCode。
      */
     @Test
     void CLOUD_ORDER_001_missingOrderReturnsProblemDetail() throws Exception {
@@ -68,7 +68,7 @@ class OrderQueryControllerTest {
 
     /**
      * CASE CLOUD-ORDER-002：列出全部訂單。
-     * Given: Service 回傳一筆摘要；When: GET /api/v1/orders；Then: 200 且陣列含 orderId。
+     * <br>Given: Service 回傳一筆摘要；When: GET /api/v1/orders；Then: 200 且陣列含 orderId。
      */
     @Test
     void CLOUD_ORDER_002_listsOrders() throws Exception {

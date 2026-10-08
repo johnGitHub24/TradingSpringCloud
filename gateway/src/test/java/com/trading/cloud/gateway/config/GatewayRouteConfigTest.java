@@ -11,8 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * 【職責】確認 Gateway 路由 Bean 已註冊進 Spring 容器。
- * 【技巧】{@code @SpringBootTest} 注入兩個 {@link RouterFunction} Bean。
- * 【概念】先驗證組態是否裝載，再做 HTTP 轉發整合測試，可縮小失敗時的排查範圍。
+ * <p>【技巧】{@code @SpringBootTest} 注入兩個 {@link RouterFunction} Bean。
+ * <p>【概念】先驗證組態是否裝載，再做 HTTP 轉發整合測試，可縮小失敗時的排查範圍。
  */
 @SpringBootTest
 @ActiveProfiles("test")
@@ -26,7 +26,7 @@ class GatewayRouteConfigTest {
 
     /**
      * CASE CLOUD-002：路由 Bean 註冊。
-     * Given: test profile 啟動；When: 注入 loop／order RouterFunction；Then: 皆非 null。
+     * <br>Given: test profile 啟動；When: 注入 loop／order RouterFunction；Then: 皆非 null。
      */
     @Test
     void CLOUD_002_gatewayRouteBeansRegistered() {
@@ -36,7 +36,7 @@ class GatewayRouteConfigTest {
 
     /**
      * CASE CLOUD-003：loop 代理路徑改寫契約。
-     * Given: 公開／下游範本常數；When: 代入 segment=trust；Then: 等於整合測試實際轉發 URI。
+     * <br>Given: 公開／下游範本常數；When: 代入 segment=trust；Then: 等於整合測試實際轉發 URI。
      */
     @Test
     void CLOUD_003_loopProxyRewritesSegmentToLoopApi() {
@@ -47,7 +47,7 @@ class GatewayRouteConfigTest {
 
     /**
      * CASE CLOUD-004：order 代理路徑改寫契約。
-     * Given: 公開／下游範本常數；When: 代入 segment=1001；Then: 等於整合測試實際轉發 URI。
+     * <br>Given: 公開／下游範本常數；When: 代入 segment=1001；Then: 等於整合測試實際轉發 URI。
      */
     @Test
     void CLOUD_004_orderProxyRewritesSegmentToOrderApi() {

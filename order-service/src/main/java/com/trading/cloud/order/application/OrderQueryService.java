@@ -10,9 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 【職責】以記憶體 Map 提供示範訂單查詢（啟動時種子資料）。
- * 【技巧】{@link ConcurrentHashMap} 存放摘要；查無資料拋 {@link OrderNotFoundException}。
- * 【概念】教學用 in-memory 服務可讓 Gateway／Feign 不必依賴真實 DB，仍能練習跨服務契約。
- * 【邊界】不負責真實撮合、持久化或分頁。
+ * <p>【技巧】{@link ConcurrentHashMap} 存放摘要；查無資料拋 {@link OrderNotFoundException}。
+ * <p>【概念】教學用 in-memory 服務可讓 Gateway／Feign 不必依賴真實 DB，仍能練習跨服務契約。
+ * <p>【邊界】不負責真實撮合、持久化或分頁。
  */
 @Service
 public class OrderQueryService {
@@ -36,8 +36,8 @@ public class OrderQueryService {
 
     /**
      * 【職責】依 ID 查詢訂單摘要。
-     * 【技巧】Map 查找；null 時拋領域例外供全域 Handler 轉 HTTP 404。
-     * 【概念】用例外表達「資源不存在」，比回傳 Optional 再在 Controller 分支更利於統一錯誤回應。
+     * <p>【技巧】Map 查找；null 時拋領域例外供全域 Handler 轉 HTTP 404。
+     * <p>【概念】用例外表達「資源不存在」，比回傳 Optional 再在 Controller 分支更利於統一錯誤回應。
      * @param orderId 訂單主鍵
      * @return 訂單摘要
      * @throws OrderNotFoundException 不存在時
@@ -52,8 +52,8 @@ public class OrderQueryService {
 
     /**
      * 【職責】回傳目前全部訂單的不可變清單。
-     * 【技巧】{@link List#copyOf} 避免呼叫端修改內部 Map 內容。
-     * 【概念】對外暴露防禦性複本，可保護服務內部狀態不被意外變更。
+     * <p>【技巧】{@link List#copyOf} 避免呼叫端修改內部 Map 內容。
+     * <p>【概念】對外暴露防禦性複本，可保護服務內部狀態不被意外變更。
      * @return 不可變訂單摘要清單
      */
     public List<OrderSummaryResponse> listAll() {

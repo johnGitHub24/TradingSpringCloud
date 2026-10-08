@@ -20,8 +20,8 @@ import static org.mockito.Mockito.when;
 
 /**
  * 【職責】驗證 DashboardService 聚合 loop／order DTO 的純編排邏輯。
- * 【技巧】Mockito 隔離兩個 Feign Client，不啟動 Spring／HTTP。
- * 【概念】單元測「組裝規則」；真實 Feign 往返留給 CASE CLOUD-001 整合測試。
+ * <p>【技巧】Mockito 隔離兩個 Feign Client，不啟動 Spring／HTTP。
+ * <p>【概念】單元測「組裝規則」；真實 Feign 往返留給 CASE CLOUD-001 整合測試。
  */
 @Tag("unit")
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +37,7 @@ class DashboardServiceTest {
 
     /**
      * CASE CLOUD-001：Feign 聚合 systemTrust／orderCount／latestOrderStatus。
-     * Given: trust=5 與一筆 FILLED；When: build；Then: 欄位與訊息正確。
+     * <br>Given: trust=5 與一筆 FILLED；When: build；Then: 欄位與訊息正確。
      */
     @Test
     void CLOUD_001_buildAggregatesTrustAndLatestOrder() {
@@ -61,7 +61,7 @@ class DashboardServiceTest {
 
     /**
      * CASE CLOUD-001：空訂單清單時最新狀態為 N/A。
-     * Given: 空 list；When: build；Then: orderCount=0、latestOrderStatus=N/A。
+     * <br>Given: 空 list；When: build；Then: orderCount=0、latestOrderStatus=N/A。
      */
     @Test
     void CLOUD_001_buildEmptyOrdersUsesNaStatus() {
@@ -78,7 +78,7 @@ class DashboardServiceTest {
 
     /**
      * CASE CLOUD-001：下游 Feign 失敗向上拋，不組裝部分結果。
-     * Given: getTrust 拋 RuntimeException；When: build；Then: 同例外。
+     * <br>Given: getTrust 拋 RuntimeException；When: build；Then: 同例外。
      */
     @Test
     void CLOUD_001_buildPropagatesDownstreamFailure() {
